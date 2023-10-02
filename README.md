@@ -158,3 +158,30 @@ const optionsEmp = {
             }
         };
 ```
+
+## Uso da API
+
+A API do Localizador de Lotes permite que você obtenha informações detalhadas sobre um lote específico, fornecendo o identificador do empreendimento, setor, quadra e lote na URL da API.
+
+### Endpoint:
+
+```
+https://api-localizador.momentum.almav.com/v1/<id-empreendimento>/<setor>/<quadra>/<lote>
+```
+
+### Parâmetros:
+
+- `<id-empreendimento>`: Identificador único do empreendimento.
+- `<setor ou gleba>`: Identificador do setor/gleba dentro do empreendimento.
+- `<quadra>`: Identificador da quadra dentro do setor.
+- `<lote>`: Identificador do lote dentro da quadra.
+
+### Exemplo:
+
+Suponha que você queira obter informações sobre o lote 7, da quadra AB, do setor IATE, do empreendimento com ID "RSCXIII". A URL da requisição seria:
+
+```
+https://api-localizador.momentum.almav.com/v1/1/2/AB/7
+```
+
+Ao fazer uma solicitação GET para a URL acima, a API retornará latitude e longitude sobre o lote especificado.
