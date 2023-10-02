@@ -72,9 +72,6 @@ Quando a página é carregada, ela exibe uma mensagem solicitando ao usuário pa
 3. Insira a Quadra e o Lote desejados.
 4. Clique no botão de pesquisa para obter os resultados.
 
-Claro! Vou adicionar uma seção explicando o uso do atributo `empreendimento` na URL e fornecer exemplos.
-
-
 ## Uso do Atributo "Empreendimento" na URL
 
 Para pré-selecionar um empreendimento específico ao carregar a página, você pode passar o identificador do empreendimento como um atributo `empreendimento` na URL. Isso permite que os usuários ou sistemas externos direcionem diretamente para um empreendimento específico sem a necessidade de selecioná-lo manualmente no dropdown.
