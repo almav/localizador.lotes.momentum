@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="pt-BR" translate="no">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="referrer" content="origin-when-crossorigin">
+    <meta name="google" content="notranslate">
+    <meta name="robots" content="noindex">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="">
+    <meta name="author" content="©2023 almav | Localizador de Lotes by Jeifferson R. Moraes">
+    <meta name="generator" content="©2023 almav 0.1.3">
+    <meta name="theme-color" content="#004d95">
+
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:url" content="https://momentum.localizador.almav.com.br/app.html">
+    <meta property="og:title" content="Localizador de Lotes - Momentum">
+    <meta property="og:site_name" content="Momentum">
+    <meta property="og:description" content="Compartilhe com Waze e Google Maps as rotas para os empreendimentos">
+    <meta property="og:image" content="images/thumb-1.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="800">
+    <meta property="og:image:height" content="800">
+    <meta property="og:type" content="website">
+
+    <title>Localizador de Lotes | Momentum</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="icon" href="https://www.momentum.com.br/addons/shared_addons/themes/momentum/img/favicon.ico" />
+    
+    <style>
+        /* MAIN */
+            html,
+            body {
+                height: 100%;
+                min-height: 100vh;
+                min-height: -webkit-fill-available;
+                margin: 0;
+                padding: 0;
+            }
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            *::-webkit-scrollbar {
+                display: none;
+                width: 0;
+                height: 0;
+            }
+            .loading {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgb(0 77 149 / 100%);
+                z-index: 9999;
+                text-align: center;
+            }
+            .loader {
+                position: absolute;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                margin: auto;
+                position: absolute;
+                left: 0; bottom: 35px; right: 0;
+                opacity: 0.7;
+            }
+            .loading img {
+                position: absolute;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                margin: auto;
+                position: absolute;
+                top: 0; left: 0; bottom: 0; right: 0;
+                opacity: 0.7;
+            }
+            .loading .img1 {
+                max-height: 120px;
+        
+            }
+            .loader {
+            border: 13px solid #f3f3f3; /* Light grey */
+            border-top: 13px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 90px;
+            height: 90px;
+            animation: spin 2s linear infinite;
+            }
+
+            @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+            }     
+
+            body {
+                display: flex;
+                align-items: center;
+                background-color: #f5f5f5;
+            }
+            input { 
+                text-transform: uppercase;
+            }
+            ::-webkit-input-placeholder { /* WebKit browsers */
+                text-transform: none;
+            }
+            :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+                text-transform: none;
+            }
+            ::-moz-placeholder { /* Mozilla Firefox 19+ */
+                text-transform: none;
+            }
+            :-ms-input-placeholder { /* Internet Explorer 10+ */
+                text-transform: none;
+            }
+            ::placeholder { /* Recent browsers */
+                text-transform: none;
+            }
+        
+        /* FORM */
+            .form-search {
+                width: 100%;
+                max-width: 330px;
+                padding: 15px;
+                margin: auto;
+            }
+
+            .form-search #container {
+                padding-top: 40px;
+            }
+            .form-search .logo {
+                display: block;
+                background-color: #004d95;
+                height: 50px;
+                align-items: center;
+                padding-top: 10px;
+            }
+            
+            .form-search .checkbox {
+                font-weight: 400;
+            }
+
+            .form-search .form-floating:focus-within {
+                z-index: 2;
+            }
+
+            .bd-placeholder-img {
+                font-size: 1.125rem;
+                text-anchor: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+            }
+
+            .title {
+                font-family: 'Roboto', sans-serif;
+                font-weight: 800 !important;
+                letter-spacing: -1px;
+            }
+
+            @media (min-width: 768px) {
+                .bd-placeholder-img-lg {
+                    font-size: 3.5rem;
+                }
+            }
+            @media (max-width: 768px) {
+                .form-search .logo {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    z-index: 999;
+                }
+            }
+
+        /* TOAST */
+            .almav-toast {
+                position: fixed;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                margin: auto;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+            }
+            .almav-toast-msg {
+                position: absolute;
+                bottom: 20px;
+                background-color: rgb(12 12 12 / 80%);
+                border-radius: 20px;
+                padding: 0 10px 0 10px;
+                color: white;
+                line-height: 30px;
+                font-size: 15px;
+                font-weight: 600;
+            }
+            .almav-toast-msg span {
+                vertical-align: middle;
+                font-size: 16px;
+                transform: translateY(-1px);
+            }
+            .almav-toast-msg.error {
+                background-color: rgb(199 21 133 / 80%);
+                ;
+            }
+        /* MODAL */
+            .qrcode-modal .modal-fullscreen .modal-body {
+                overflow-y: hidden !important;
+            }
+            .qrcode-modal .wrapper{
+                display: flex;
+                min-height: 100%;
+                flex-direction: column;
+                overflow-y: hidden;
+            }
+            .qrcode-modal .wrapper footer {
+                padding-top: 10px;
+            }
+            .qrcode-modal .wrapper header {
+                margin: auto;
+                max-width: 80%;
+            }
+            .qrcode-modal article{
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                flex: 1;
+            }
+            .qrcode-modal article img {
+                display: inline-block !important;
+                width: 100%;
+            }
+            .qrcode-modal #qrcode {
+                width: 100%;
+                height: 100%;
+            }
+            .share-modal #recipient-name{ 
+                text-transform: none !important;
+            }
+            @media all and (orientation: landscape) {
+                .qrcode-modal article img {
+                    width: auto;
+                    height: 100%;
+                }
+            }
+        /* RESULT */
+            .result.container-fluid {
+                height: 100%;
+                overflow-y: hidden;
+            }
+            .result.container-fluid .row {
+                height: 100%;
+                overflow-y: hidden;
+                color: white;
+            }
+            .result.container-fluid .header {
+                background-color: #004d95;
+                padding-top: 15px;
+            }
+            .result.container-fluid .header .arrow {
+                float: left;
+                padding: 2px 1px 1px 15px;
+                color: whitesmoke;
+                cursor: pointer;
+            }
+            .result.container-fluid .header .desc {
+                padding: 30px 10px 0px 10px;
+            }
+            .result.container-fluid .header .buttons img {
+                width: 100px;
+                margin-right: 10px;
+                padding-bottom: 20px;
+                cursor: pointer;
+            }
+            .result.container-fluid .header .buttons-share .row.options .col {
+                cursor: pointer;
+            }
+            .result.container-fluid .content {
+                background-color: gray;
+                padding: 0;
+                min-height: 50%;
+            }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+        crossorigin="anonymous"></script>
+</head>
+
+<body class="text-center">
+    <div class="loading">
+        <div id="loading-container">
+            <img class="img1"
+                src="images/logo-221x30.png"
+                width="auto">
+            <div class="loader"></div>
+        </div>
+    </div>
+    <main class="form-search">
+        <div id="container">
+            <form id="search" class="needs-validation" autocomplete="off" novalidate>
+                <div id="intro">
+                    <p class="lead">
+                    <h5>Localizador de Lotes</h5><span>Selecione o empreendimento para realizar a busca por Quadra e Lote.</span>
+                    </p>
+                </div>
+                <input type="hidden" id="inputEmp">
+                <div id="groupSearch" style="display:none">
+                    <select id="floatingGleba" class="form-select form-select-lg" aria-label=".form-select-sm">
+                        <option value=""></option>
+                    </select>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="floatingQuadra" placeholder="" autocomplete="off">
+                        <label for="floatingQuadra">Quadra</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="floatingLote" placeholder="">
+                        <label for="floatingLote">Lote</label>
+                    </div>
+                    <button class="w-100 btn btn-lg btn-primary" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg> pesquisar</button>
+                </div>
+            </form>
+        </div>
+    </main>
+    <!-- result -->
+    <div class="result container-fluid" style="display: none;">
+        <div class="row">
+            <div class="col-sm header">
+                <div class="arrow" onclick="backArrow()">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-arrow-left"
+                        viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z">
+                        </path>
+                    </svg>
+                </div>
+                <div class="group-apps">
+                    <div class="desc">
+                        <p class="title-desc">Escolha o aplicativo que será utilizado para compartilhar a rota destino</p>
+                        <p class="title-result"><strong>SBRR</strong> Gleba <strong>Quadra</strong>  <strong>Lote</strong> </p>
+                    </div>
+                    <div class="buttons">
+                        <img alt="Momentum" src="images/waze-125.png" onclick="routeBy('waze')">
+                        <img alt="Momentum" src="images/maps-125.png" onclick="routeBy('maps')">
+                    </div>
+                </div>
+                <div class="group-share" style="display: none;">
+                    <div class="buttons-share container-fluid">
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="desc">
+                                    <p class="title-desc-share">Escolha como deseja compartilhar a rota destino</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row options" style="padding-bottom: 10px;">
+                            <div class="col">QR Code</div>
+                            <div class="col">Email</div>
+                            <div class="col">WhatsApp</div>
+                        </div>
+                        <div class="row options">
+                            <div class="col"><svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="currentColor" class="bi bi-qr-code"
+                                viewBox="0 0 16 16">
+                                <path d="M2 2h2v2H2V2Z" />
+                                <path d="M6 0v6H0V0h6ZM5 1H1v4h4V1ZM4 12H2v2h2v-2Z" />
+                                <path d="M6 10v6H0v-6h6Zm-5 1v4h4v-4H1Zm11-9h2v2h-2V2Z" />
+                                <path
+                                    d="M10 0v6h6V0h-6Zm5 1v4h-4V1h4ZM8 1V0h1v2H8v2H7V1h1Zm0 5V4h1v2H8ZM6 8V7h1V6h1v2h1V7h5v1h-4v1H7V8H6Zm0 0v1H2V8H1v1H0V7h3v1h3Zm10 1h-1V7h1v2Zm-1 0h-1v2h2v-1h-1V9Zm-4 0h2v1h-1v1h-1V9Zm2 3v-1h-1v1h-1v1H9v1h3v-2h1Zm0 0h3v1h-2v1h-1v-2Zm-4-1v1h1v-2H7v1h2Z" />
+                                <path d="M7 12h1v3h4v1H7v-4Zm9 2v2h-3v-1h2v-1h1Z" />
+                            </svg></div>
+                            <div class="col"><svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="currentColor" class="bi bi-envelope-fill"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z" />
+                            </svg></div>
+                            <div class="col"><svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" fill="currentColor" class="bi bi-whatsapp"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" />
+                            </svg></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm content"></div>
+        </div>
+    </div>
+    <!-- Modal QR Code -->
+    <div class="modal fade qrcode-modal" id="qrcodeModal" tabindex="-1" aria-labelledby="qrcodetModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="wrapper">
+                        <header>
+                            <p>Aponte a sua câmera para fazer a leitura do QR Code.</p>
+                        </header>
+                        <article>
+                            <div id="qrcode"></div>
+                        </article>
+                        <footer>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">fechar</button>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Share -->
+    <div class="modal fade share-modal" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="shareModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label id="recipient" for="recipient-name" class="col-form-label">Celular:</label>
+                            <input type="text" class="form-control disable-uppercase" id="recipient-name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-success">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="defaultModal" tabindex="-1" aria-labelledby="defaultModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Escolha o empreendimento.</p>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const optionsEmp = {
+            "SBRR":{
+                "id":"3",
+                "name":"Santa Bárbara Resort Residence",
+                "gleba":{
+                    "alias":"Gleba",
+                    "values":["Gleba I","Gleba II","Gleba III"],
+                    "Gleba I":"4",
+                    "Gleba II":"5",
+                    "Gleba III":"6"
+                }
+            },
+            "RSCXIII":{
+                "id": "1",
+                "name":"Riviera de Santa Cristina XIII",
+                "gleba":{
+                    "alias":"Setor",
+                    "values":["IATE","MARINA"],
+                    "IATE":"2",
+                    "MARINA":"3"
+                }
+            },
+            "NVIER":{
+                "id": "6",
+                "setor": "9",
+                "name":"Ninho Verde I Eco Residence",
+                "gleba":false
+            },
+            "NVIIER":{
+                "id":"2",
+                "setor": "3",
+                "name":"Ninho Verde II Eco Residence",
+                "gleba":false
+            },
+            "RSCI":{
+                "id":"9",
+                "setor": "12",
+                "name": "Riviera de Santa Cristina I",
+                "gleba":false
+            },
+            "RSCII":{
+                "id":"4",
+                "setor": "7",
+                "name": "Riviera de Santa Cristina II",
+                "gleba":false
+            },
+            "RSCIII":{
+                "id":"5",
+                "setor": "8",
+                "name": "Riviera de Santa Cristina III",
+                "gleba":false
+            },
+            "RSCIV":{
+                "id":"8",
+                "setor": "11",
+                "name": "Riviera de Santa Cristina IV",
+                "gleba":false
+            },
+            "TSCV":{
+                "id":"7",
+                "setor": "10",
+                "name": "Terras de Santa Cristina V",
+                "gleba":false
+            }
+        },
+        a = `
+                
+        ©`+ new Date().getFullYear().toString() + ` Localizador de Lotes          
+        https://almav.com
+                
+        `;
+        console.log('%c ' + a, 'brackground:#1f1f1f;color:#008000');
+        // console.log = function () { };
+        var defaultModal = new bootstrap.Modal(document.getElementById('defaultModal'), {
+                keyboard: true
+            }),
+            qrcodeModal = new bootstrap.Modal(document.getElementById('qrcodeModal'), {
+                keyboard: true
+            }),
+            shareModal = new bootstrap.Modal(document.getElementById('shareModal'), {
+                keyboard: true
+            }),
+            defaultModalEl = document.getElementById('defaultModal'),
+            qrcodeModalEl = document.getElementById('qrcodeModal'),
+            shareModalEl = document.getElementById('shareModal'),
+            appRoute, linkWaze, linkMaps, shareApp, titleFind
+            backArrowSet = 1;
+        
+        // 1. Obter o valor do atributo GET 'empreendimento' da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const empreendimento = urlParams.get('empreendimento');
+
+        // 2. Se o empreendimento estiver definido e existir em optionsEmp, pré-selecione-o
+        if (empreendimento && optionsEmp[empreendimento]) {
+            // Pré-seleciona o empreendimento no dropdown
+            document.getElementById('inputEmp').value = empreendimento;
+
+            // Chama a função changeEmp para atualizar a interface
+            changeEmp();
+        } else {
+            // Caso contrário, mostre a mensagem inicial
+            document.getElementById('intro').querySelector('span').textContent = "Selecione o empreendimento para realizar a busca por Quadra e Lote.";
+        }
+
+        function changeEmp() {
+            var inputEmp = $("#inputEmp").val().trim();
+            if (!inputEmp) {
+                $("#intro span").text("Selecione o empreendimento para realizar a busca por Quadra e Lote.");
+            } else {
+                if (optionsEmp[inputEmp].gleba) {
+                    $('#floatingGleba option').remove();
+                    var sel = "selected";
+                    optionsEmp[inputEmp].gleba.values.forEach(function (e, i) {
+                        $('#floatingGleba').append($("<option " + sel + " />").val(e).text(e));
+                        sel = "";
+                    });
+                    $('#floatingGleba').fadeIn();
+                    $("#intro span").text("Informe: " + optionsEmp[inputEmp].gleba.alias + ", Quadra e o Lote.");
+                } else {
+                    $("#intro span").text("Informe a Quadra e o Lote.");
+                    $('#floatingGleba').fadeOut();
+                }
+                $('#groupSearch').fadeIn();
+            }
+        }
+
+        function backArrow() {
+            if (backArrowSet == 1) {
+                $('.result').hide();
+                $('.form-search').show();
+            } else if (backArrowSet == 2) {
+                $('.result').show();
+                $('.form-search').hide();
+                $('.result .header .group-apps').show();
+                $('.result .header .group-share').hide();
+                backArrowSet = 1;
+            }
+        }
+        function routeBy(app) {
+            appRoute = app;
+            backArrowSet = 2;
+            $('.result .header .group-apps').hide();
+            $('.result .header .group-share').show();
+
+        }
+        function shareRoute(e) {
+            var share = $(e).text().trim();
+            if ($(e).text().trim() == '') {
+                if ($(e).find('svg').attr('class') == 'bi bi-whatsapp') {
+                    share = 'WhatsApp';
+                } else if ($(e).find('svg').attr('class') == 'bi bi-envelope-fill') {
+                    share = 'Email';
+                } else if ($(e).find('svg').attr('class') == 'bi bi-qr-code') {
+                    share = 'QR Code';
+                }
+            }
+            console.log('waze',linkWaze);
+            console.log('maps',linkMaps);
+            shareApp = (appRoute == 'waze' ? linkWaze : linkMaps);
+            var textCode;
+            if (share == 'QR Code') {
+                textCode = shareApp;
+                $('#qrcode').html('').attr('title','');      
+                new QRCode(document.getElementById("qrcode"), textCode);
+                qrcodeModal.show();
+            } else if (share == 'Email') {
+                textCode = "mailto:{{email}}?subject=" + encodeURIComponent($('<div/>').html(titleFind).text()) + "&body=" +  encodeURIComponent(shareApp);
+                $('#shareModal #shareModalLabel').text("Mensagem");
+                $('#shareModal #recipient').text("Email");
+                $('#shareModal #recipient-name').val('');
+                $('#shareModal .btn-success').unbind();
+                $('#shareModal .btn-success').click(function () {
+                    const email = validateEmail($('#shareModal #recipient-name').val().trim());
+                    if (email && email.length > 1) {
+                        shareModal.hide();
+                        toast("Rota compartilhada", 5000, false, 'green');
+                        window.open(textCode.replace('{{email}}', email[0]), "email");
+                    } else {
+                        $('#defaultModal .modal-body p').text('Informe um email válido.')
+                        defaultModal.show();
+                    }
+                });
+                shareModal.show();
+                shareModalEl.addEventListener('shown.bs.modal', function () {
+                    shareModalEl.removeEventListener('shown.bs.modal', null);
+                    $('#shareModal #recipient-name').focus().click;
+                })
+            } else if (share == 'WhatsApp') {
+                textCode = "https://wa.me/{{number}}?text=" + encodeURIComponent(shareApp);
+                $('#shareModal #shareModalLabel').text(share);
+                $('#shareModal #recipient').text("Celular +55(DDD)99999-9999");
+                $('#shareModal #recipient-name').val('+55 ');
+                $('#shareModal .btn-success').unbind();
+                $('#shareModal .btn-success').click(function(){
+                    const number = $('#shareModal #recipient-name').val().replace(/[^\d]/g, "").trim();
+                    if(number && number.length > 5){
+                        shareModal.hide();
+                        toast("Rota compartilhada", 5000, false, 'green');
+                        window.open(textCode.replace('{{number}}',number),"whatsapp");
+                    } else {
+                        $('#defaultModal .modal-body p').text('Informe um número de celular válido.')
+                        defaultModal.show();
+                    }
+                });
+                shareModal.show();
+                shareModalEl.addEventListener('shown.bs.modal', function () {
+                    shareModalEl.removeEventListener('shown.bs.modal', null);
+                    $('#shareModal #recipient-name').focus();
+                })
+            }
+        }
+        function storageAvailable(type) {
+            var storage;
+            try {
+                storage = window[type];
+                var x = '__storage_test__';
+                storage.setItem(x, x);
+                storage.removeItem(x);
+                return true;
+            } catch (e) {}
+        }
+        
+        function submitEmp() {
+            var inputEmp = $("#inputEmp").val(),
+                inputGleba = $("#floatingGleba option:selected").attr('value'),
+                inputQuadra = $('#floatingQuadra').val().trim(),
+                inputLote = $('#floatingLote').val().trim();
+            if (!inputEmp){
+                $('#defaultModal .modal-body p').text('Selecione o empreendimento.')
+                defaultModal.show();
+                defaultModalEl.addEventListener('hidden.bs.modal', function () {
+                    defaultModalEl.removeEventListener('hidden.bs.modal', null);
+                    $("#inputEmp").focus();
+                })
+                return false;
+            }
+            if (!inputQuadra){
+                $('#defaultModal .modal-body p').text('Informe a Quadra.')
+                defaultModal.show();
+                defaultModalEl.addEventListener('hidden.bs.modal', function () {
+                    defaultModalEl.removeEventListener('hidden.bs.modal', null);
+                    $("#floatingQuadra").focus();
+                })
+                return false;
+            }
+            if (!inputLote){
+                $('#defaultModal .modal-body p').text('Informe o Lote.')
+                defaultModal.show();
+                defaultModalEl.addEventListener('hidden.bs.modal', function () {
+                    defaultModalEl.removeEventListener('hidden.bs.modal', null);
+                    $("#floatingLote").focus();
+                })
+                return false;
+            }
+            function getSetor(emp,setor) {
+                var setor = emp.setor;
+                if(emp.gleba){
+                    setor = emp.gleba[gleba];
+                }
+                return (emp.gleba?emp.gleba[setor]:emp.setor);
+            }
+            const id = optionsEmp[inputEmp].id,
+                  setor = ( optionsEmp[inputEmp].gleba ? optionsEmp[inputEmp].gleba[inputGleba] : optionsEmp[inputEmp].setor );
+            const settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": "https://api-localizador.momentum.almav.com/v1/"+id+"/"+setor+"/"+inputQuadra+"/"+inputLote,
+                "method": "GET",
+                "headers": {
+                    "Content-Type": "application/json"
+                }
+            };
+            toast("aguarde...", 5000);
+            $(".loading").fadeIn("slow");
+            $.ajax(settings).done(function (response) {
+                $(".loading").fadeOut();
+                if(response.status){
+                    if(response.status == 'not-found'){
+                        toast("Não foi localizado", 5000, 1);
+                    } else {
+                        const lon = response.coordinates[0], lat = response.coordinates[1];
+                        titleFind = (optionsEmp[inputEmp].gleba ? "<strong>" + inputEmp + "</strong> " + inputGleba + " Quadra <strong>" + inputQuadra.toUpperCase() + "</strong>  Lote <strong>" + inputLote + "</strong>" : "<strong>" + inputEmp + "</strong> Quadra <strong>" + inputQuadra.toUpperCase() + "</strong>  Lote <strong>" + inputLote + "</strong>");
+                        const ifr = '<iframe src="https://maps.google.com/maps?q='+lat+','+lon+'&t=k&z=14&amp;output=embed" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>'
+                        linkWaze = "https://www.waze.com/ul?ll=" + lat + "%2C" + lon +"&navigate=yes&zoom=17";
+                        linkMaps = "https://www.google.com/maps/search/?api=1&query=" + lat + "%2C" + lon +"&t=k";
+                        toast("Lote localizado", 5000, false,'green');
+                        $('.form-search').hide();
+                        ( optionsEmp[inputEmp].gleba ? $('.result .header .desc .title-result').html("<strong>" + inputEmp + "</strong> " + inputGleba + " Quadra <strong>" + inputQuadra.toUpperCase() + "</strong>  Lote <strong>" + inputLote + "</strong>")
+                        : $('.result .header .desc .title-result').html("<strong>" + inputEmp +  "</strong> Quadra <strong>" + inputQuadra.toUpperCase() + "</strong>  Lote <strong>" + inputLote + "</strong>")
+                        )
+                        $('.result').show();
+                        $('.result .content').html(ifr);
+                    }
+                } else {
+                    toast("Erro! Tente novamente", 5000, 1);
+                }
+                console.log("response",response);
+            }).fail(function (response) {
+                $(".loading").fadeOut("slow",function(){
+                    toast("Erro na conexão ", 5000, true);
+                });
+            });
+        }
+        function toast(msg, t = 5000, error = false, flag = false) {
+            $('.almav-toast') ? $('.almav-toast').remove() : '';
+            $('body').append('<div class="almav-toast" style="display:none;z-index:999" ><div class="almav-toast-msg"' + (flag ? ' style="background-color:'+flag+'"' : "") +'><div></div>');
+            $('.almav-toast-msg').html(msg);
+            if (error !== false) $('.almav-toast-msg').addClass('error');
+            $('.almav-toast').fadeIn();
+            var timeout = setTimeout(function () {
+                $('.almav-toast').fadeOut();
+            }, t);
+            $('.almav-toast').click(function () { $('.almav-toast').remove() });
+        }
+        function utf8_to_b64(str) {
+            return window.btoa(unescape(encodeURIComponent(str)));
+        }
+        function b64_to_utf8(str) {
+            return decodeURIComponent(escape(window.atob(str)));
+        }
+        const validateEmail = (email) => {
+            return String(email)
+                .toLowerCase()
+                .match(
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                );
+        };
+        (function () {
+            'use strict'
+            setTimeout(() => { 
+                $(".loading").fadeOut('slow'); 
+            }, 1000);
+            $('.group-share .buttons-share .row.options .col').click(function () { 
+                shareRoute(this);
+            });
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        submitEmp();
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }, false)
+                })
+        })();
+        (function (global) {
+            if (typeof (global) === "undefined") {
+                throw new Error("window is undefined");
+            }
+            var _hash = "!";
+            var noBackPlease = function () {
+                global.location.href += "#";
+                global.setTimeout(function () {
+                    global.location.href += "!";
+                }, 50);
+            };
+            global.onhashchange = function () {
+                if (global.location.hash !== _hash) {
+                    global.location.hash = _hash;
+                }
+            };
+            global.onload = function () {
+                noBackPlease();
+                document.body.onkeydown = function (e) {
+                    var elm = e.target.nodeName.toLowerCase();
+                    if (e.which === 8 && (elm !== 'input' && elm !== 'textarea')) {
+                        e.preventDefault();
+                    }
+                    e.stopPropagation();
+                };
+            }
+        })(window);
+    </script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+</body>
+</html>
