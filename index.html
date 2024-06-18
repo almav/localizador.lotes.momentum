@@ -111,7 +111,7 @@
             body {
                 display: block;
                 align-items: center;
-                background-color: white;
+                background-color: #f2f2f2;
             }
             input { 
                 text-transform: uppercase;
@@ -136,8 +136,10 @@
             .form-search {
                 width: 100%;
                 max-width: 330px;
-                padding: 15px;
+                padding: 0 15px 15px 15px;
                 margin: auto;
+				overflow-y: auto;
+				max-height: 100vh;
             }
 
             .form-search #container {
@@ -202,19 +204,15 @@
 
         /* TOAST */
             .almav-toast {
-                position: fixed;
+                position: inherit;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 text-align: center;
-                margin: auto;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                right: 0;
+                margin-top: 10px;
             }
             .almav-toast-msg {
-                position: absolute;
+                position: inherit;
                 bottom: 20px;
                 background-color: rgb(12 12 12 / 80%);
                 border-radius: 20px;
@@ -233,6 +231,13 @@
                 background-color: rgb(199 21 133 / 80%);
                 ;
             }
+			.almav-toast.founded {
+				z-index: 999;
+				display: flex;
+				position: absolute;
+				width: 100%;
+				transform: translate(-10px, -170px);
+			}
         /* MODAL */
             .qrcode-modal .modal-fullscreen .modal-body {
                 overflow-y: hidden !important;
@@ -300,7 +305,7 @@
             .result.container-fluid .header .buttons img {
                 width: 70px;
                 margin-right: 10px;
-                padding-bottom: 20px;
+                padding-bottom: 0;
                 cursor: pointer;
             }
             .result.container-fluid .header .buttons-share .row.options .col {
@@ -311,6 +316,13 @@
                 padding: 0;
                 min-height: 45%;
             }
+			.text-info-p {
+				padding-top: 10px;
+				font-size: 12px;
+			}
+			p.title-result {
+				margin-bottom: 0;
+			}
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -335,9 +347,7 @@
         <div id="container">
             <form id="search" class="needs-validation" autocomplete="off" novalidate>
                 <div id="intro">
-                    <p class="lead">
-                    <h5>Localizador de Lotes</h5><span>Selecione o empreendimento para realizar a busca por Quadra e Lote.</span>
-                    </p>
+                    <span>Selecione o empreendimento para realizar a busca por Quadra e Lote.</span>
                 </div>
                 <input type="hidden" id="inputEmp">
                 <div id="groupSearch" style="display:none">
@@ -356,9 +366,10 @@
                         viewBox="0 0 16 16">
                         <path
                             d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                    </svg> pesquisar</button>
+                    </svg> Pesquisar</button>
                 </div>
             </form>
+			<div class="text-info-p"><span>Encontre o lote desejado e trace sua rota. Você também pode compartilhar a localização do lote facilitando a chegada de visitantes e prestadores de serviço.</span></div>
         </div>
     </main>
     <!-- result -->
@@ -377,20 +388,19 @@
                 </div>
                 <div class="group-apps">
                     <div class="desc">
-                        <p class="title-desc" style="transform: translateX(-14px);">Compartilhe a localização</p>
                         <p class="title-result"><strong>SBRR</strong> Gleba <strong>Quadra</strong>  <strong>Lote</strong> </p>
                     </div>
                     <div class="buttons">
-                        <img alt="Momentum" src="images/waze-125.png" onclick="routeBy('waze')">
-                        <img alt="Momentum" src="images/maps-125.png" onclick="routeBy('maps')">
+                        <img alt="Momentum" src="images/waze-125.png" onclick="routeByApp(linkWaze)">
+                        <img alt="Momentum" src="images/maps-125.png" onclick="routeByApp(linkMaps)">
                     </div>
+					<div class="text-info-p" style="padding-left: 20px;"><span>Escolha o aplicativo para navegar.</span></div>
                 </div>
                 <div class="group-share" style="display: none;">
                     <div class="buttons-share container-fluid">
                         <div class="row">
                             <div class="col-sm">
                                 <div class="desc">
-                                    <p class="title-desc-share">Compartilhe a localização</p>
                                 </div>
                             </div>
                         </div>
@@ -616,7 +626,7 @@
                 if (optionsEmp[inputEmp].gleba) {
                     $('#floatingGleba option').remove();
                     var sel = "selected";
-                    $('#floatingGleba').append($("<option  />").val("").text("selecionar: " + optionsEmp[inputEmp].gleba.alias));
+                    $('#floatingGleba').append($("<option  />").val("").text("Selecionar: " + optionsEmp[inputEmp].gleba.alias));
                     optionsEmp[inputEmp].gleba.values.forEach(function (e, i) {
                         sel = "";
                         $('#floatingGleba').append($("<option " + sel + " />").val(e).text(e));
@@ -624,7 +634,7 @@
                     $('#floatingGleba').fadeIn();
                     $("#intro span").text("Informe: " + optionsEmp[inputEmp].gleba.alias + ", Quadra e o Lote.");
                 } else {
-                    $('#floatingGleba').append($("<option  />").val("").text("selecionar: " + optionsEmp[inputEmp].gleba.alias));
+                    $('#floatingGleba').append($("<option  />").val("").text("Selecionar: " + optionsEmp[inputEmp].gleba.alias));
                     $("#intro span").text("Informe a Quadra e o Lote.");
                     $('#floatingGleba').fadeOut();
                 }
@@ -644,12 +654,29 @@
                 backArrowSet = 1;
             }
         }
+		function routeByApp(app) {
+		  if (app && typeof app === 'string') {
+			if (isWebView()) {
+			  // Se estiver em uma WebView, use postMessage para comunicar com o React Native
+			  window.ReactNativeWebView.postMessage(app);
+			} else {
+			  // Se estiver em um navegador, redirecione para a URL
+			  window.location.href = app;
+			}
+		  } else {
+			console.error('URL inválida:', app);
+		  }
+		}
+		function isWebView() {
+		  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+		  // Detecta se está em uma WebView em iOS ou Android
+		  return /WebView|iPhone|iPod|iPad|Android/.test(userAgent) && !/Safari/.test(userAgent);
+		}
         function routeBy(app) {
             appRoute = app;
             backArrowSet = 2;
             $('.result .header .group-apps').hide();
             $('.result .header .group-share').show();
-
         }
         function shareRoute(e) {
             var share = $(e).text().trim();
@@ -802,7 +829,7 @@
                         const ifr = '<iframe src="https://maps.google.com/maps?q='+lat+','+lon+'&t=k&z=14&amp;output=embed" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>'
                         linkWaze = "https://www.waze.com/ul?ll=" + lat + "%2C" + lon +"&navigate=yes&zoom=17";
                         linkMaps = "https://www.google.com/maps/search/?api=1&query=" + lat + "%2C" + lon +"&t=k";
-                        toast("Lote localizado", 5000, false,'green');
+                        toast("Lote localizado", 5000, false, 'green', '.col-sm.header', 'founded');
                         $('.form-search').hide();
                         ( optionsEmp[inputEmp].gleba ? $('.result .header .desc .title-result').html("<strong>" + inputEmp + "</strong> " + inputGleba + " Quadra <strong>" + inputQuadra.toUpperCase() + "</strong>  Lote <strong>" + inputLote + "</strong>")
                         : $('.result .header .desc .title-result').html("<strong>" + inputEmp +  "</strong> Quadra <strong>" + inputQuadra.toUpperCase() + "</strong>  Lote <strong>" + inputLote + "</strong>")
@@ -816,13 +843,13 @@
                 console.log("response",response);
             }).fail(function (response) {
                 $(".loading").fadeOut("slow",function(){
-                    toast("Erro na conexão ", 5000, true);
+                    toast("Erro na busca ", 5000, true);
                 });
             });
         }
-        function toast(msg, t = 5000, error = false, flag = false) {
+        function toast(msg, t = 5000, error = false, flag = false, targetEl = "#container", addClass = "") {
             $('.almav-toast') ? $('.almav-toast').remove() : '';
-            $('body').append('<div class="almav-toast" style="display:none;z-index:999" ><div class="almav-toast-msg"' + (flag ? ' style="background-color:'+flag+'"' : "") +'><div></div>');
+            $(targetEl).append('<div class="almav-toast' + (addClass?" "+ addClass:"") + '" style="display:none;z-index:999" ><div class="almav-toast-msg"' + (flag ? ' style="background-color:'+flag+'"' : "") +'><div></div>');
             $('.almav-toast-msg').html(msg);
             if (error !== false) $('.almav-toast-msg').addClass('error');
             $('.almav-toast').fadeIn();
@@ -889,7 +916,38 @@
                 };
             }
         })(window);
+		
+		// Função para garantir que o input focado esteja visível
+		function ensureInputIsVisible(input) {
+			// Aguarda um pequeno tempo para garantir que o teclado esteja totalmente visível
+			setTimeout(() => {
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}, 300);
+		}
+
+		document.addEventListener('focusin', (e) => {
+			if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+				ensureInputIsVisible(e.target);
+			}
+		});
+
+		// Detectar quando o teclado virtual é exibido ou ocultado (funciona principalmente em iOS)
+		window.addEventListener('resize', () => {
+			const activeElement = document.activeElement;
+			if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA') {
+				ensureInputIsVisible(activeElement);
+			}
+		});
+
+		// Adiciona um evento para garantir que os inputs estejam visíveis ao focar
+		document.getElementById('floatingQuadra').addEventListener('focus', (e) => {
+			ensureInputIsVisible(e.target);
+		});
+
+		document.getElementById('floatingLote').addEventListener('focus', (e) => {
+			ensureInputIsVisible(e.target);
+		});
     </script>
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
 </body>
 </html>
